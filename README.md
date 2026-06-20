@@ -1,94 +1,93 @@
-🧠 BrainCache
-A full-stack note-taking application with image/file uploads, tags, pinning, archiving, AI summarization, and PDF export.
-🎥 Demo
-(Add your screen recording here if needed) `Screen.Recording.2026-03-18.104205.mp4`
-⚙️ Tech Stack
-Frontend: React.js, React Router, Lucide React, Vanilla CSS Backend: Node.js, Express.js Database: MySQL Auth: JWT (JSON Web Tokens) File Storage: Cloudinary + Multer AI Service: Google GenAI / OpenAI (via `aiController`) PDF Generation: (PDFKit / jsPDF / Puppeteer) Build Tool: Vite
-✨ Features
-🔐 Authentication
+# 🧠 BrainCache
 
-* JWT-based login & registration
-* Protected routes
-📝 Notes Management
+> A full-stack note-taking application with image/file uploads, tags, pinning, archiving, and an AI chat assistant powered by Google Gemini.
 
-* Create, edit, delete notes
-* Support for:
-   * Text notes
-   * Image notes
-   * Link notes
-   * File attachments
-🏷 Tags System
+---
 
-* Custom tags
-* Color-coded labels
-* Filter notes by tags
-📌 Productivity Features
-
-* Pin important notes
-* Archive/unarchive notes
-* Search & filter functionality
-☁ File Uploads
-
-* Image/file upload via Cloudinary + Multer
-* Secure cloud storage
-🤖 AI Features (NEW)
-✨ AI Summarization
-
-* Generate concise summaries of long notes
-* Works for both text and image-based notes
-* Helps quickly extract key insights
-📄 Export Notes as PDF
-
-* Export notes into downloadable PDF files
-* Supports:
-   * Text notes
-   * Image notes
-* Includes:
-   * Title
-   * Content
-   * AI-generated summary (if enabled)
-   * Attached images (for image notes)
-   * With the Tags
-🚀 Setup & Run
-📌 Prerequisites
-
-* Node.js v18+
-* MySQL running locally
-* Cloudinary account (free tier works)
-* AI API key (Google GenAI or OpenAI)
-🗄 1. Database Setup
-Open MySQL and run:
-
-```
-
-```
+## 🎥 Demo
 
 
-```
+
+---
+
+## ⚙️ Tech Stack
+
+| Layer | Technology |
+|---|---|
+| **Frontend** | React.js, React Router, Lucide React, Vanilla CSS |
+| **Backend** | Node.js, Express.js |
+| **Database** | MySQL |
+| **Auth** | JWT (JSON Web Tokens) |
+| **File Storage** | Cloudinary + Multer |
+| **AI Service** | Google Gemini API |
+| **Build Tool** | Vite |
+
+---
+
+## ✨ Features
+
+### 🔐 Authentication
+- JWT-based login & registration
+- Protected routes (PrivateRoute / PublicRoute)
+
+### 📝 Notes Management
+- Create, edit, delete notes
+- Support for **Text**, **Image**, **Link**, and **File** note types
+
+### 🏷️ Tags System
+- Custom tags with color-coded labels
+- Filter notes by tag from the sidebar
+
+### 📌 Productivity Features
+- Pin important notes to the top
+- Archive / unarchive notes
+- Real-time search & type filter
+
+### ☁️ File Uploads
+- Image / file upload via **Cloudinary + Multer** (memoryStorage)
+- Secure cloud storage with auto CDN URL
+
+### 🤖 AI Chat (NEW)
+- Global AI chat assistant available on all pages via sidebar
+- Automatically loads all your notes as context
+- Reference any note by name — *"I have a question about my React Hooks note"*
+- Ask questions, get summaries, expand ideas, discuss anything you've saved
+- Powered by **Google Gemini API** via native REST (no SDK)
+
+---
+
+## 🚀 Setup & Run
+
+### 📌 Prerequisites
+- Node.js v18+
+- MySQL running locally
+- Cloudinary account *(free tier works)*
+- Gemini API key → [aistudio.google.com/app/apikey](https://aistudio.google.com/app/apikey)
+
+---
+
+### 🗄️ 1. Database Setup
+
+Open MySQL Workbench and run:
+
+```sql
 CREATE DATABASE braincache;
 ```
 
-Tables are auto-created when backend starts.
-⚙️ 2. Backend Setup
+> All tables (`users`, `notes`, `tags`, `note_tags`) are auto-created on first backend start.
 
-```
+---
 
-```
+### ⚙️ 2. Backend Setup
 
-
-```
+```bash
 cd backend
 npm install
 ```
 
-Create `.env` file:
+Fill in your `backend/.env`:
 
-```
-
-```
-
-
-```
+```env
 PORT=5000
 
 DB_HOST=localhost
@@ -103,103 +102,63 @@ CLOUDINARY_CLOUD_NAME=your_cloud_name
 CLOUDINARY_API_KEY=your_api_key
 CLOUDINARY_API_SECRET=your_api_secret
 
-# AI CONFIG
-GEMINI_API_KEY=your_ai_key_here
-# or OPENAI_API_KEY=your_openai_key_here
+GEMINI_API_KEY=your_gemini_api_key_here
 
 CLIENT_URL=http://localhost:5173
 ```
 
-Run backend:
+Start the server:
 
+```bash
+npm run dev    # development (nodemon)
+npm start      # production
 ```
 
-```
+Backend → `http://localhost:5000`
 
+---
 
-```
-npm run dev   # development
-npm start     # production
-```
+### 💻 3. Frontend Setup
 
-Backend runs at:
-
-```
-
-```
-
-
-```
-http://localhost:5000
-```
-
-💻 3. Frontend Setup
-
-```
-
-```
-
-
-```
+```bash
 cd frontend
 npm install
 ```
 
-Create `.env`:
+Fill in your `frontend/.env`:
 
-```
-
-```
-
-
-```
+```env
 VITE_API_URL=http://localhost:5000/api
 ```
 
-Run frontend:
+Start the dev server:
 
-```
-
-```
-
-
-```
+```bash
 npm run dev
 ```
 
-Frontend runs at:
+Frontend → `http://localhost:5173`
 
-```
+---
 
-```
-
-
-```
-http://localhost:5173
-```
-
-📁 Project Structure
-
-```
-
-```
-
+## 📁 Project Structure
 
 ```
 BrainCache/
 ├── backend/
 │   ├── config/
-│   │   ├── db.js
-│   │   ├── initDB.js
-│   │   └── cloudinary.js
+│   │   ├── db.js                  # MySQL pool connection
+│   │   ├── initDB.js              # Auto-create tables on startup
+│   │   ├── cloudinary.js          # Multer memoryStorage + upload helper
+│   │   └── gemini.js              # Gemini REST API URL config
 │   ├── controllers/
 │   │   ├── authController.js
 │   │   ├── noteController.js
 │   │   ├── tagController.js
 │   │   ├── uploadController.js
-│   │   └── aiController.js        # NEW
+│   │   └── chatController.js      # AI chat with notes context
 │   ├── middleware/
-│   │   └── authMiddleware.js
+│   │   └── authMiddleware.js      # JWT verify
 │   ├── models/
 │   │   ├── userModel.js
 │   │   ├── noteModel.js
@@ -209,7 +168,7 @@ BrainCache/
 │   │   ├── noteRoutes.js
 │   │   ├── tagRoutes.js
 │   │   ├── uploadRoutes.js
-│   │   └── aiRoutes.js           # NEW
+│   │   └── chatRoutes.js          # POST /api/chat
 │   ├── server.js
 │   ├── .env
 │   └── package.json
@@ -217,10 +176,24 @@ BrainCache/
 └── frontend/
     ├── src/
     │   ├── components/
+    │   │   ├── Layout.jsx          # Sidebar + Outlet shell
+    │   │   ├── NoteCard.jsx
+    │   │   ├── NoteModal.jsx
+    │   │   ├── TagsModal.jsx
+    │   │   └── ToastContainer.jsx
     │   ├── context/
+    │   │   └── AuthContext.jsx
     │   ├── hooks/
+    │   │   └── useToast.js
     │   ├── pages/
+    │   │   ├── LoginPage.jsx
+    │   │   ├── RegisterPage.jsx
+    │   │   ├── DashboardPage.jsx
+    │   │   ├── ArchivePage.jsx
+    │   │   ├── ProfilePage.jsx
+    │   │   └── ChatPage.jsx        # AI Chat UI
     │   ├── styles/
+    │   │   └── global.css
     │   ├── api.js
     │   ├── App.jsx
     │   └── main.jsx
@@ -230,54 +203,57 @@ BrainCache/
     └── package.json
 ```
 
-🧠 API Endpoints (AI)
-✨ Summarize Note
+---
 
-```
+## 🧠 API Endpoints
 
-```
+### 🔐 Auth
+| Method | Endpoint | Description |
+|---|---|---|
+| `POST` | `/api/auth/register` | Register new user |
+| `POST` | `/api/auth/login` | Login |
+| `GET` | `/api/auth/me` | Get current user 🔒 |
+| `PUT` | `/api/auth/profile` | Update profile 🔒 |
 
+### 📝 Notes
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/api/notes` | Get all notes (search, type, tag filter) 🔒 |
+| `GET` | `/api/notes/archived` | Get archived notes 🔒 |
+| `GET` | `/api/notes/:id` | Get single note 🔒 |
+| `POST` | `/api/notes` | Create note (+ file upload) 🔒 |
+| `PUT` | `/api/notes/:id` | Update note 🔒 |
+| `DELETE` | `/api/notes/:id` | Delete note 🔒 |
+| `PATCH` | `/api/notes/:id/pin` | Toggle pin 🔒 |
+| `PATCH` | `/api/notes/:id/archive` | Toggle archive 🔒 |
 
-```
-POST /api/ai/summarize
-```
+### 🏷️ Tags
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/api/tags` | Get all tags 🔒 |
+| `POST` | `/api/tags` | Create tag 🔒 |
+| `PUT` | `/api/tags/:id` | Update tag 🔒 |
+| `DELETE` | `/api/tags/:id` | Delete tag 🔒 |
 
-Body:
+### ☁️ Upload
+| Method | Endpoint | Description |
+|---|---|---|
+| `POST` | `/api/upload/avatar` | Upload profile avatar 🔒 |
+| `POST` | `/api/upload/file` | Upload note file/image 🔒 |
 
-```
+### 🤖 AI Chat
+| Method | Endpoint | Description |
+|---|---|---|
+| `POST` | `/api/chat` | Chat with AI using your notes as context 🔒 |
 
-```
+> 🔒 = Requires `Authorization: Bearer <token>` header
 
+---
 
-```
-{
-  "content": "Your note content here"
-}
-```
+## 🎯 Future Improvements
 
-📄 Export Note as PDF
-
-```
-
-```
-
-
-```
-POST /api/ai/export-pdf
-```
-
-Body:
-
-```
-
-```
-
-
-```
-{
-  "noteId": 1
-}
-```
-*  Collaboration / shared notes 
-*  Mobile app (React Native) 
-give me this in the ReadMe so i can put it in my repo
+- [ ] 🎙️ Voice-to-note input
+- [ ] 🏷️ AI auto-tagging
+- [ ] 🔍 Smart semantic search
+- [ ] 👥 Collaboration / shared notes
+- [ ] 📱 Mobile app (React Native)
